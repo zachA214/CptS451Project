@@ -2,6 +2,32 @@
 
 An E-Commerce Platform 
 
+#Setup venv:
+```
+python3 -m venv venv
+source venv/bin/activate   # Mac/Linux
+
+venv\Scripts\activate      # Windows
+```
+
+#Install:
+```
+python -m pip install --upgrade pip
+pip install django
+npm install
+npm install axios
+```
+
+#To run Django:
+```
+python manage.py runserver
+```
+
+#To Run React:
+```
+npm run dev
+```
+
 ## Group Members
 
 _Lemar Joe Encio_ <br>
@@ -19,3 +45,5 @@ _Annalee Nersten_
 _Zachary Adelson_ - **Team Lead** <br>
   >  WSUID: 11757305 <br>
   >  Email: zachary.adelson@wsu.edu 
+
+
