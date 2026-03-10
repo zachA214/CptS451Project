@@ -16,6 +16,7 @@ python -m pip install --upgrade pip
 pip install django
 npm install
 npm install axios
+npm install tailwindcss @tailwindcss/vite
 ```
 
 #To run Django:

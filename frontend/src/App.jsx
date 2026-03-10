@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import axios from 'axios';
 import './App.css'
+import Footer from './components/Footer';
+import Navbar from './components/Navbar';
 
 function App() {
   const [message, setMessage] = useState("");
@@ -20,8 +22,14 @@ function App() {
 
   return (
     <div>
+      <nav>
+        <Navbar></Navbar>
+      </nav>
       <h1>React + Django</h1>
       <p>{message}</p>
+      <footer>
+        <Footer></Footer>
+      </footer>
     </div>
   );
 }
