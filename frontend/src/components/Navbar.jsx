@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
 
 const Navbar = ({bool}) => {
     const [button1, setButton1] = useState("Home");
@@ -8,6 +9,7 @@ const Navbar = ({bool}) => {
     const [hid, setHid] = useState(true);
     const [loginBtn, setLoginBtn] = useState("Login/Signup");
 
+    
     function isAdmin(bool) {
         if (bool) {
             setButton1("Dashboard");
@@ -18,6 +20,22 @@ const Navbar = ({bool}) => {
             setLoginBtn("Logout");
         }
     }
+
+    //false: user is clicking home, should redirct to homepage
+    //true: admin us clicking on Dashboard, should redirct to admin dash
+    function onButton1Click() {
+            if (bool) {
+               
+            } else {
+                //redirct to homepage
+            }
+
+    }
+
+
+    useEffect(() => {
+        isAdmin(bool);
+    });
 
     return(
         <nav className="relative bg-gray-800 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
@@ -41,9 +59,14 @@ const Navbar = ({bool}) => {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
-                    <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button1}</a>
-                    <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button2}</a>
-                    <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button3}</a>
+                    <button 
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+                        
+                        >
+                            {button1}
+                    </button>
+                    <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button2}</button>
+                    <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button3}</button>
                 </div>
                 </div>
             </div>

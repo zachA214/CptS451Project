@@ -17,14 +17,17 @@ pip install django
 npm install
 npm install axios
 npm install tailwindcss @tailwindcss/vite
+npm i react-router-dom
 ```
 
-#To run Django:
+#To run Django
+cd backend:
 ```
 python manage.py runserver
 ```
 
-#To Run React:
+#To Run React
+cd frontend:
 ```
 npm run dev
 ```

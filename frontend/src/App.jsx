@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Outlet, Link } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import axios from 'axios';
@@ -23,10 +24,11 @@ function App() {
   return (
     <div>
       <nav>
-        <Navbar bool={false} ></Navbar>
+        <Navbar bool={true} ></Navbar>
       </nav>
-      <h1>React + Django</h1>
-      <p>{message}</p>
+      {/* <h1>React + Django</h1>
+      <p>{message}</p> */}
+      <Outlet />
       <footer>
         <Footer></Footer>
       </footer>
