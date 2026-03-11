@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
+import { Outlet, Link } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import axios from 'axios';
 import './App.css'
+import Footer from './components/Footer';
+import Navbar from './components/Navbar';
 
 function App() {
   const [message, setMessage] = useState("");
@@ -20,8 +23,15 @@ function App() {
 
   return (
     <div>
-      <h1>React + Django</h1>
-      <p>{message}</p>
+      <nav>
+        <Navbar bool={true} ></Navbar>
+      </nav>
+      {/* <h1>React + Django</h1>
+      <p>{message}</p> */}
+      <Outlet />
+      <footer>
+        <Footer></Footer>
+      </footer>
     </div>
   );
 }
