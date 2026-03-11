@@ -1,14 +1,20 @@
+import { useState, useEffect } from 'react'
+
 const Footer = () => {
     return (
       <footer className="text-center text-sm text-gray-500 py-2 border-t">
         <p>&copy; 2025 Ecommerce. All rights reserved.</p>
-                <div className="gap-4">
-                <a href="https://google.com">
-                    Contact Us
-                </a>
-                <a href="https://google.com">
-                    About Us
-                </a>
+                <div className="justify-center-safe">
+                    <div>
+                        <a href="https://google.com">
+                            Contact Us
+                        </a>
+                    </div>
+                    <div>
+                        <a href="https://google.com">
+                            About Us
+                        </a>
+                    </div>
                 </div>
                 
             

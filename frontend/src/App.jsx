@@ -23,7 +23,7 @@ function App() {
   return (
     <div>
       <nav>
-        <Navbar></Navbar>
+        <Navbar bool={false} ></Navbar>
       </nav>
       <h1>React + Django</h1>
       <p>{message}</p>
