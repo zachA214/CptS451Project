@@ -11,14 +11,14 @@ function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/hello/')
-      .then(res => {
-        console.log(res.data);
-        setMessage(res.data.message);
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    // axios.get('http://localhost:8000/api/hello/')
+    //   .then(res => {
+    //     console.log(res.data);
+    //     setMessage(res.data.message);
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //   });
   }, []);
 
   return (
@@ -26,8 +26,6 @@ function App() {
       <nav>
         <Navbar bool={true} ></Navbar>
       </nav>
-      {/* <h1>React + Django</h1>
-      <p>{message}</p> */}
       <Outlet />
       <footer>
         <Footer></Footer>
