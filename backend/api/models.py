@@ -72,6 +72,13 @@ class Admin(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
 
+#Cart
+class Cart(models.Model):
+    cart_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    total = models.FloatField()
 
 # UserAuth
 class UserAuth(models.Model):
