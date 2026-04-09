@@ -13,6 +13,9 @@ export default function AdAddCategory(){
     const [cName, setName] = useState("");
     const [category_id, setCategoryId] = useState("");
 
+    //to rerender table after add, delete, or update
+    const [refresh, setRefresh] = useState(false);
+
     //Triggered by submit button in add Modal, adds category to database and table is refreshed
     const AddCategory = async (e) => {
         if(cName === "") {
@@ -35,6 +38,7 @@ export default function AdAddCategory(){
             console.log("Category added: ");
             setName("");
             setOpen(false);
+            setRefresh(prev => !prev);
         })
         .catch(error => console.error(error));
     }
@@ -58,6 +62,7 @@ export default function AdAddCategory(){
             console.log(data.message);
             setCategoryId("");
             setopenDelCatModal(false);
+            setRefresh(prev => !prev);
         })
         .catch(error => console.error(error));
     }
@@ -114,6 +119,7 @@ export default function AdAddCategory(){
             setName("");
             setopenUpdateModal(false);
             document.getElementById("categoryInput").hidden = true;
+            setRefresh(prev => !prev);
         })
         .catch(error => console.error(error));
 
@@ -141,7 +147,7 @@ export default function AdAddCategory(){
         .catch(error => console.error(error));
 
     
-    },[categories]);
+    },[refresh]);
 
 
     return(
