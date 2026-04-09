@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
-import { Link, NavLink, Navigate } from 'react-router-dom';
+import { Link, NavLink, Navigate, redirect, useNavigate } from 'react-router-dom';
 
-const Navbar = ({bool}) => {
+export default function Navbar({bool}){
+//const Navbar = ({bool}) => {
     const [button1, setButton1] = useState("Home");
     const [button2, setButton2] = useState("Products");
     const [button3, setButton3] = useState("Search");
     const [initials, setinitials] = useState("DEF");
     const [hid, setHid] = useState(true);
     const [loginBtn, setLoginBtn] = useState("Login/Signup");
-
+    
+    //Use to navigate to different pages
+    const navigate = useNavigate();
     
     function isAdmin(bool) {
         if (bool) {
@@ -21,16 +24,27 @@ const Navbar = ({bool}) => {
         }
     }
 
-    //false: user is clicking home, should redirct to homepage
+    //Home or Dashboard
     //true: admin us clicking on Dashboard, should redirct to admin dash
+    //false: user is clicking home, should redirct to homepage
     function onButton1Click() {
-            if (bool) {
-                Navigate('/admin/categories');
-            } else {
-                //redirct to homepage
-                Navigate('/');
-            }
+        
+        if (bool) {
+            navigate("/");
+        } else {
+            //user home here
+        }
+    }
 
+    //products or categories
+    //true: admin us clicking on categories, should redirct to admin categories
+    //false: user is clicking products, should redirct to product page
+    function onButton2Click() {
+        if (bool) {
+            navigate("/admin/categories");
+        } else {
+            //user products here
+        }
     }
 
 
@@ -60,13 +74,18 @@ const Navbar = ({bool}) => {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
-                    <button 
+                    <button //Home or Dashboard
                         className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
                         onClick={onButton1Click}
                         >
-                        {button1}
+                        {button1} 
                     </button>
-                    <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button2}</button>
+                    <button //Products or Categories
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+                        onClick={onButton2Click}
+                        >
+                        {button2}
+                    </button>
                     <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button3}</button>
                 </div>
                 </div>
@@ -86,4 +105,4 @@ const Navbar = ({bool}) => {
         </nav>
     );
 };
-export default Navbar;
+//export default Navbar;

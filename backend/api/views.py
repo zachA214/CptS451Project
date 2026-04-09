@@ -87,7 +87,6 @@ def category_details(request, category_id):
         except Category.DoesNotExist:
             return Response({"error": "Category not found"}, status=404)
 
-    
 #Product
 ###################################################################################
 @api_view(['GET', 'POST'])
