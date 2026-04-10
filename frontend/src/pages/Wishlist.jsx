@@ -14,6 +14,20 @@ export default function Wishlist() {
             .catch(err => console.error(err));
     }, []);
 
+    const removeFromWishlist = async (productId) => {
+        console.log("Remove from wishlist:", productId);
+
+        fetch(`http://localhost:8000/api/wishlist/remove/${productId}/`, {
+            method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("deleted", data);
+        setItems(prev => prev.filter(i => i.product.product_id !== productId));
+        })
+        .catch(err => console.error(err));
+    };
+
     return (
         <div className="container shadow-xl size-full">
 
@@ -56,7 +70,10 @@ export default function Wishlist() {
 
                             <div className="flex gap-2 w-full mt-2">
 
-                                <button className="btn-primary text-xs px-2 py-1 flex-1">
+                                <button 
+                                className="btn-primary text-xs px-2 py-1 flex-1"
+                                onClick={() => removeFromWishlist(p.product_id)}
+                                >
                                     Remove
                                 </button>
 

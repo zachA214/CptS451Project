@@ -10,8 +10,8 @@ def hello(request):
 
 @api_view(['GET'])
 def get_wishlist(request):
-    user = request.user
-    #user = User.objects.first() # for testing
+    #user = request.user
+    user = User.objects.first() # for testing
 
     wishlist = Wishlist.objects.filter(user=user)
 
@@ -32,8 +32,8 @@ def get_wishlist(request):
 
 @api_view(['POST'])
 def addItem_wishlist(request):
-    user = request.user
-    #user = User.objects.first() # for testing
+    #user = request.user
+    user = User.objects.first() # for testing
 
     product_id = request.data.get('product_id')
 
@@ -48,12 +48,13 @@ def addItem_wishlist(request):
     return Response({"message": "Added"})
 
 @api_view(['DELETE'])
-def removeitem_wishlist(request):
-    user = request.user
-    product_id = request.data.get('product_id')
+def removeitem_wishlist(request, product_id):
+    #user = request.user
+    user = User.objects.first() # for testing
 
     Wishlist.objects.filter(
-        user=user, product_id=product_id
+        user=user,
+        product_id=product_id
     ).delete()
 
     return Response({"message": "Removed"})
