@@ -88,12 +88,14 @@ export default function Navbar({bool}){
                         {button2}
                     </button>
                     <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button3}</button>
-                    <button //Wishlist
-                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
-                        onClick={() => navigate("/wishlist")}
+                    {!bool && ( //wishlist 
+                        <button
+                            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+                            onClick={() => navigate("/wishlist")}
                         >
                         Wishlist
-                    </button>
+                        </button>
+                    )}
                 </div>
                 </div>
             </div>
