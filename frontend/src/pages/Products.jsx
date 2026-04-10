@@ -4,16 +4,23 @@ import Modal from '../components/Modal';
 export default function Products() {
 
     const [products, setProducts] = useState([]);
+
     const [openReviewModal, setOpenReviewModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+
     const [rating, setRating] = useState("");
     const [comment, setComment] = useState("");
+
     const [reviews, setReviews] = useState({});
+
+    const [openReviewPanel, setOpenReviewPanel] = useState(false);
+    const [activeProduct, setActiveProduct] = useState(null);
 
     useEffect(() => {
         fetch('http://localhost:8000/api/products/')
             .then(res => res.json())
             .then(data => {
+
                 console.log("PRODUCTS:", data);
 
                 const productList = Array.isArray(data) ? data : [];
@@ -31,17 +38,11 @@ export default function Products() {
                         .catch(err => console.error(err));
                 });
 
-                setRating("");
-                setComment("");
-                setSelectedProduct(null);
-                setOpenReviewModal(false);
             })
             .catch(err => console.error(err));
     }, []);
 
-    const addToWishlist = async (productId) => {
-        console.log("Adding to wishlist:", productId);
-
+    const addToWishlist = (productId) => {
         fetch('http://localhost:8000/api/wishlist/add/', {
             method: 'POST',
             headers: {
@@ -50,10 +51,13 @@ export default function Products() {
             body: JSON.stringify({ product_id: productId })
         })
             .then(res => res.json())
-            .then(data => {
-                console.log("Added!", data);
-            })
+            .then(data => console.log("Added!", data))
             .catch(err => console.error(err));
+    };
+
+    const openReviews = (productId) => {
+        setActiveProduct(productId);
+        setOpenReviewPanel(true);
     };
 
     const writeReview = (productId) => {
@@ -61,8 +65,7 @@ export default function Products() {
         setOpenReviewModal(true);
     };
 
-    const submitReview = async () => {
-
+    const submitReview = () => {
         if (!rating) {
             alert("Please enter a rating.");
             return;
@@ -91,6 +94,7 @@ export default function Products() {
             .catch(err => console.error(err));
     };
 
+
     return (
         <div className="container shadow-xl size-full">
 
@@ -101,6 +105,7 @@ export default function Products() {
             </div>
 
             <div className="flex flex-wrap justify-center gap-6">
+
                 {products.map(p => (
                     <div
                         key={p.product_id}
@@ -115,7 +120,7 @@ export default function Products() {
                             ${p.price}
                         </p>
 
-                        {p?.img_val ? (
+                        {p.img_val ? (
                             <img
                                 src={p.img_val}
                                 alt={p.name}
@@ -128,6 +133,7 @@ export default function Products() {
                         )}
 
                         <div className="flex gap-2 w-full mt-2">
+
                             <button
                                 className="btn-primary text-xs px-2 py-1 flex-1"
                                 onClick={() => addToWishlist(p.id)}
@@ -141,28 +147,62 @@ export default function Products() {
                             >
                                 Review
                             </button>
+
                         </div>
 
-                        <div className="w-full mt-2 text-xs">
-                            {reviews[p.id]?.length > 0 ? (
-                                reviews[p.id].map((r, index) => (
-                                    <div
-                                        key={index}
-                                        className="border-t pt-1 mt-1"
-                                    >
-                                        ⭐ {r.rating} - {r.comment}
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-400">
-                                    No reviews yet
-                                </p>
-                            )}
-                        </div>
+                        <button
+                            className="text-blue-500 text-xs mt-1"
+                            onClick={() => openReviews(p.id)}
+                        >
+                            View Reviews &#8594;
+                        </button>
 
                     </div>
                 ))}
+
             </div>
+
+            {openReviewPanel && (
+                <div className="fixed inset-0 flex justify-end z-50">
+
+                    <div
+                        className="absolute inset-0 bg-black/40"
+                        onClick={() => setOpenReviewPanel(false)}
+                    />
+
+                    <div className="relative w-96 h-full bg-white shadow-xl p-4 overflow-y-auto">
+
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-lg font-bold">
+                                Reviews
+                            </h2>
+
+                            <button
+                                onClick={() => setOpenReviewPanel(false)}
+                                className="text-gray-500"
+                            >
+                                &#128942;
+                            </button>
+                        </div>
+
+                        {reviews[activeProduct]?.length > 0 ? (
+                            reviews[activeProduct].map((r, i) => (
+                                <div key={i} className="border-b py-2">
+                                    &#11088; {r.rating}
+                                    <p className="text-sm">
+                                        {r.comment}
+                                    </p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-gray-400">
+                                No reviews yet
+                            </p>
+                        )}
+
+                    </div>
+                </div>
+            )}
 
             <Modal
                 open={openReviewModal}
