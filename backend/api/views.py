@@ -8,13 +8,41 @@ from .models import (Order, Admin, UserAuth, Wishlist, ProductReview, User, Prod
 def hello(request):
     return Response({"message": "Hello from Django!"})
 
+@api_view(['GET'])
+def get_wishlist(request):
+    user = request.user
+    #user = User.objects.first() # for testing
+
+    wishlist = Wishlist.objects.filter(user=user)
+
+    data = []
+    for item in wishlist:
+        p = item.product
+        data.append({
+            "id": item.id,
+            "product": {
+                "product_id": p.product_id,
+                "name": p.name,
+                "price": p.price,
+                "img_val": p.img_val
+            }
+        })
+
+    return Response(data)
+
 @api_view(['POST'])
 def addItem_wishlist(request):
     user = request.user
+    #user = User.objects.first() # for testing
+
     product_id = request.data.get('product_id')
 
+    print("USER:", user)
+    print("PRODUCT:", product_id)
+
     Wishlist.objects.get_or_create(
-        user=user, product_id=product_id
+        user=user,
+        product_id=product_id
     )
 
     return Response({"message": "Added"})
