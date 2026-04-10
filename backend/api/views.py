@@ -8,6 +8,9 @@ from .models import (Order, Admin, UserAuth, Wishlist, ProductReview, User, Prod
 def hello(request):
     return Response({"message": "Hello from Django!"})
 
+
+#Wishlist
+###################################################################################
 @api_view(['GET'])
 def get_wishlist(request):
     #user = request.user
@@ -59,10 +62,25 @@ def removeitem_wishlist(request, product_id):
 
     return Response({"message": "Removed"})
 
+#reviews
+###################################################################################
+@api_view(['GET'])
+def get_reviews(request, product_id):
+    reviews = ProductReview.objects.filter(product_id=product_id)
+
+    data = [{
+        "rating": r.rating,
+        "comment": r.comment
+    } for r in reviews]
+
+    return Response(data)
+
 @api_view(['POST'])
 def add_review(request):
+    user = User.objects.first() # for testing
+
     ProductReview.objects.create(
-        user=request.user,
+        user=user,
         product_id=request.data['product_id'],
         rating=request.data['rating'],
         comment=request.data.get('comment', '')

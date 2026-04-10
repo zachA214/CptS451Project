@@ -56,7 +56,7 @@ export default function Wishlist() {
                                 ${p?.price}
                             </p>
 
-                            {p?.img_val ? (
+                            {p.img_val ? (
                                 <img
                                     src={p.img_val}
                                     alt={p.name}
@@ -68,7 +68,7 @@ export default function Wishlist() {
                                 </div>
                             )}
 
-                            <div className="flex gap-2 w-full mt-2">
+                            <div className="flex gap-2 w-full">
 
                                 <button 
                                 className="btn-primary text-xs px-2 py-1 flex-1"

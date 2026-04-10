@@ -11,6 +11,7 @@ urlpatterns = [
     path('wishlist/add/', addItem_wishlist), 
     path('wishlist/remove/<int:product_id>/', removeitem_wishlist),
     path('review/', add_review),
+    path('review/<int:product_id>/', get_reviews),
     path('order/', get_add_order),
     path('users/', get_add_users),
     path('userauth/', get_add_userauth),
