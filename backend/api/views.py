@@ -8,32 +8,79 @@ from .models import (Order, Admin, UserAuth, Wishlist, ProductReview, User, Prod
 def hello(request):
     return Response({"message": "Hello from Django!"})
 
+
+#Wishlist
+###################################################################################
+@api_view(['GET'])
+def get_wishlist(request):
+    #user = request.user
+    user = User.objects.first() # for testing
+
+    wishlist = Wishlist.objects.filter(user=user)
+
+    data = []
+    for item in wishlist:
+        p = item.product
+        data.append({
+            "id": item.id,
+            "product": {
+                "product_id": p.product_id,
+                "name": p.name,
+                "price": p.price,
+                "img_val": p.img_val
+            }
+        })
+
+    return Response(data)
+
 @api_view(['POST'])
 def addItem_wishlist(request):
-    user = request.user
+    #user = request.user
+    user = User.objects.first() # for testing
+
     product_id = request.data.get('product_id')
 
+    print("USER:", user)
+    print("PRODUCT:", product_id)
+
     Wishlist.objects.get_or_create(
-        user=user, product_id=product_id
+        user=user,
+        product_id=product_id
     )
 
     return Response({"message": "Added"})
 
 @api_view(['DELETE'])
-def removeitem_wishlist(request):
-    user = request.user
-    product_id = request.data.get('product_id')
+def removeitem_wishlist(request, product_id):
+    #user = request.user
+    user = User.objects.first() # for testing
 
     Wishlist.objects.filter(
-        user=user, product_id=product_id
+        user=user,
+        product_id=product_id
     ).delete()
 
     return Response({"message": "Removed"})
 
+#reviews
+###################################################################################
+@api_view(['GET'])
+def get_reviews(request, product_id):
+    reviews = ProductReview.objects.filter(product_id=product_id)
+
+    data = [{
+        "rating": r.rating,
+        "comment": r.comment
+    } for r in reviews]
+
+    return Response(data)
+
 @api_view(['POST'])
 def add_review(request):
+    user = User.objects.first() # for testing
+
     ProductReview.objects.create(
-        user=request.user,
+        user=user,
         product_id=request.data['product_id'],
         rating=request.data['rating'],
         comment=request.data.get('comment', '')

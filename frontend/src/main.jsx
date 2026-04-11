@@ -6,6 +6,8 @@ import App from './App.jsx'
 import Homepage from './pages/Homepage'
 import AdminDash from './pages/AdminDash'
 import AdAddCategory from './pages/AdAddCategory'
+import Wishlist from './pages/Wishlist'
+import Products from './pages/Products'
 
 const router = createBrowserRouter([
   {
@@ -14,7 +16,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Homepage/> },   // Main hompage todo once created
       { path: '/admin', element: <AdminDash/>}, //Once auth available, run auth first then set true
-      {path: '/admin/categories', element: <AdAddCategory/>}
+      {path: '/admin/categories', element: <AdAddCategory/>},
+      { path: '/wishlist', element: <Wishlist/> },
+      { path: '/products', element: <Products/> }
     ],
   },
 ])
