@@ -8,6 +8,7 @@ import AdminDash from './pages/AdminDash'
 import AdAddCategory from './pages/AdAddCategory'
 import Wishlist from './pages/Wishlist'
 import Products from './pages/Products'
+import AdAddProducts from './pages/AdAddProducts'
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
       { path: '/admin', element: <AdminDash/>}, //Once auth available, run auth first then set true
       {path: '/admin/categories', element: <AdAddCategory/>},
       { path: '/wishlist', element: <Wishlist/> },
-      { path: '/products', element: <Products/> }
+      { path: '/products', element: <Products/> },
+      {path: '/admin/products', element: <AdAddProducts/>}
     ],
   },
 ])
