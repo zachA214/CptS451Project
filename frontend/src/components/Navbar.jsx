@@ -30,9 +30,10 @@ export default function Navbar({bool}){
     function onButton1Click() {
         
         if (bool) {
-            navigate("/");
+            navigate("/admin");
         } else {
             //user home here
+            navigate("/");
         }
     }
 
@@ -45,6 +46,14 @@ export default function Navbar({bool}){
         } else {
             //user products here
             navigate("/products");
+        }
+    }
+
+    function onButton3Click(){
+        if (bool) {
+            navigate("/admin/products");
+        } else {
+            //user search here
         }
     }
 
@@ -87,7 +96,12 @@ export default function Navbar({bool}){
                         >
                         {button2}
                     </button>
-                    <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">{button3}</button>
+                    <button 
+                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+                        onClick={onButton3Click}
+                        >
+                        {button3}
+                    </button>
                     {!bool && ( //wishlist 
                         <button
                             className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"

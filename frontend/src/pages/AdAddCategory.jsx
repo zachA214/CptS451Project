@@ -95,6 +95,7 @@ export default function AdAddCategory(){
             else
             {
                 console.error("Failed to retreive category: ", response.status);
+                document.getElementById("categoryInput").hidden = true;
             }
     }
 
