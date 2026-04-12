@@ -121,10 +121,13 @@ def category_details(request, category_id):
         
     elif request.method == 'DELETE':
         try:
-            Category.objects.filter(category_id=category_id).delete()
-            return Response({"message": "Category removed"}, status=200)
+            if Category.objects.filter(category_id=category_id).exists():
+                Category.objects.filter(category_id=category_id).delete()
+                return Response({"message": "Category removed"}, status=200)
+            else:
+                return Response({"message": "Category does not exist"}, status=400)
         except Exception as e:
-            return Response({"error": str(e)}, status=404)
+            return Response({"message": str(e)}, status=404)
     elif request.method == 'PATCH':
         try:
             category = Category.objects.get(category_id=category_id)
@@ -168,7 +171,7 @@ def get_add_products(request):
         except Exception as e:
             return Response({"error": str(e)}, status=400)
         
-@api_view(['GET', 'DELETE'])
+@api_view(['GET', 'DELETE', 'PATCH'])
 def product_details(request, product_id):
     if request.method == 'GET':
         try:
@@ -192,6 +195,19 @@ def product_details(request, product_id):
             return Response({"message": "Product removed"}, status=200)
         except Exception as e:
             return Response({"error": str(e)}, status=404)
+    elif request.method == 'PATCH':
+        try:
+            product = Product.objects.get(product_id=product_id)
+            product.name = request.data['name']
+            product.description = request.data['description']
+            product.inventory = request.data['inventory']
+            product.price = request.data['price']
+            product.img_val = request.data.get('img_val')
+            product.category_id = request.data.get('category_id')
+            product.save()
+            return Response({"message": "Product updated"}, status=200)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=404)
 
 #User
 ###################################################################################
