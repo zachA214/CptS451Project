@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Table from '../components/Table';
 import Modal from '../components/Modal';
+import Toast from '../components/Toast';
 
 export default function AdAddCategory(){
 
@@ -12,6 +13,9 @@ export default function AdAddCategory(){
     //Attributes in tables
     const [cName, setName] = useState("");
     const [category_id, setCategoryId] = useState("");
+
+     //ForToast
+     const [toast, setToast] = useState({ show: false, message: "", type: "success" });
 
     //to rerender table after add, delete, or update
     const [refresh, setRefresh] = useState(false);
@@ -33,14 +37,22 @@ export default function AdAddCategory(){
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
-        .then(data => {
+
+        if (response.ok) {
+            const result = await response.json();
             console.log("Category added: ");
             setName("");
             setOpen(false);
             setRefresh(prev => !prev);
-        })
-        .catch(error => console.error(error));
+            setToast({ show: true, message: result.message, type: "success" });
+            setTimeout(() => {setToast(t => ({show: false}));}, 3000);
+        }
+        else
+        {
+            console.error("Failed to add category: ", response);
+            setToast({ show: true, message: "Failed to add category", type: "error" });
+            setTimeout(() => {setToast(t => ({show: false}));}, 3000);
+        }
     }
 
     const DeleteCategory = async (e) => {
@@ -57,14 +69,22 @@ export default function AdAddCategory(){
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            setCategoryId("");
-            setopenDelCatModal(false);
+        
+        if (response.ok) {
+            const result = await response.json();
+            console.log("Category deleted: ");
+            setName("");
+            setOpen(false);
             setRefresh(prev => !prev);
-        })
-        .catch(error => console.error(error));
+            setToast({ show: true, message: result.message, type: "success" });
+            setTimeout(() => {setToast(t => ({show: false}));}, 3000);
+        }
+        else
+        {
+            console.error("Failed to delete category: ", response);
+            setToast({ show: true, message: "Failed to delete category", type: "error" });
+            setTimeout(() => {setToast(t => ({show: false}));}, 3000);
+        }
     }
 
     const retreiveCategory = async (e) => {
@@ -172,7 +192,7 @@ export default function AdAddCategory(){
                         className='border p-2' 
                         placeholder='Category Name'
                         required={true}
-                        onChange={(e)=>setName(e.target.value)} 
+                        onChange={(e)=> setName(e.target.value)} 
                         value={cName}>
                     </input>
                     <button className='btn-primary w-auto flex justify-self-center' onClick={AddCategory}>Submit</button>
@@ -235,6 +255,8 @@ export default function AdAddCategory(){
                     <button className='btn-primary w-auto flex justify-self-center' onClick={UpdateCategory}>Submit</button>
                 </div>
             </Modal>
+
+            {toast.show &&<Toast message={toast.message} type={toast.type} />}
         </div>
 
 
