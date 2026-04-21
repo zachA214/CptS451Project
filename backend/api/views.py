@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import (Order, Admin, UserAuth, Wishlist, ProductReview, User, Product, Category)
+from django.db.models import Avg
 
 # Create your views here.
 @api_view(['GET'])
@@ -136,6 +137,15 @@ def category_details(request, category_id):
             return Response({"message": "Category updated"}, status=200)
         except Category.DoesNotExist:
             return Response({"error": "Category not found"}, status=404)
+        
+@api_view(['GET'])
+def get_category_count(request):
+    if request.method == 'GET':
+        try:
+            count = Category.objects.count()
+            return Response({"category_count": count}, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
 #Product
 ###################################################################################
@@ -208,6 +218,15 @@ def product_details(request, product_id):
             return Response({"message": "Product updated"}, status=200)
         except Product.DoesNotExist:
             return Response({"error": "Product not found"}, status=404)
+        
+@api_view(['GET'])
+def get_product_count(request):
+    if request.method == 'GET':
+        try:
+            count = Product.objects.count()
+            return Response({"product_count": count}, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
 #User
 ###################################################################################
@@ -235,6 +254,15 @@ def get_add_users(request):
                 is_admin=request.data['is_admin']
             )
             return Response({"message": "User added"})
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+@api_view(['GET'])
+def get_user_count(request):
+    if request.method == 'GET':
+        try:
+            count = User.objects.filter(is_admin=False).count()
+            return Response({"user_count": count}, status=200)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
         
@@ -270,7 +298,27 @@ def get_add_order(request):
             return Response({"message": "Order added"})
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+        
+@api_view(['GET'])
+def get_order_count(request):
+    if request.method == 'GET':
+        try:
+            count = Order.objects.count()
+            return Response({"order_count": count}, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
+@api_view(['GET'])
+def get_avg_sale(request):
+    if request.method == 'GET':
+        try:
+            avg = Order.objects.aggregate(totalAvg=Avg('total_price'))['totalAvg']
+            string_avg = f"{avg:.2f}"
+            return Response({"avg_total": float(string_avg)}, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+        
 #Admin
 ###################################################################################
 @api_view(['GET', 'POST'])

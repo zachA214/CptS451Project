@@ -57,10 +57,10 @@ export default function AdAddProducts(){
     //Triggered by submit button in add Modal, adds product to database and table is refreshed
     const AddProduct = async (e) => {
     
-        if(name === "" || description === "" || price === "" || category_id === "" || inventory === "" || img_val === "") {
-            alert("Please fill in all fields.");
-            return;
-        }
+        // if(name === "" || description === "" || price === "" || category_id === "" || inventory === "" || img_val === "") {
+        //     alert("Please fill in all fields.");
+        //     return;
+        // }
 
         console.log("newProduct: ", {name, description, price, category_id, inventory, img_val});
         const detail = {name, description, price, category_id, inventory, img_val};
@@ -100,7 +100,8 @@ export default function AdAddProducts(){
             alert("No file selected. Please select a file.");
             return;
         }
-        const encoding = await ConvertToBase64(file).then(encoded => {return encoded.split(",")[1]});
+        //const encoding = await ConvertToBase64(file).then(encoded => {return encoded.split(",")[1]});
+        const encoding = await ConvertToBase64(file).then(encoded => {return encoded});
 
         console.log("Encoding: ", encoding);
         setImgVal(encoding);
@@ -182,10 +183,10 @@ export default function AdAddProducts(){
 
     //Triggered by submit button in update modal, updates the product in the database and table is refreshed
     const UpdateProduct = async (e) => {
-        if(name === "" || description === "" || price === "" || category_id === "" || inventory === "" || img_val === "") {
-            alert("Please fill in all fields.");
-            return;
-        }
+        // if(name === "" || description === "" || price === "" || category_id === "" || inventory === "" || img_val === "") {
+        //     alert("Please fill in all fields.");
+        //     return;
+        // }
 
         const response = await fetch(`http://localhost:8000/api/products/${product_id}/`, {
             method: 'PATCH',

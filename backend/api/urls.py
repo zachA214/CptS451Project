@@ -15,5 +15,10 @@ urlpatterns = [
     path('order/', get_add_order),
     path('users/', get_add_users),
     path('userauth/', get_add_userauth),
-    path('admin/', get_add_admin)
+    path('admin/', get_add_admin),
+    path('users/count/', get_user_count),
+    path('products/count/', get_product_count),
+    path('categories/count/', get_category_count),
+    path('orders/count/', get_order_count),
+    path('orders/averagesale/', get_avg_sale),
 ]
