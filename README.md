@@ -16,6 +16,7 @@ python -m pip install --upgrade pip
 pip install django
 npm install
 npm install axios
+npm install apexcharts@3.46.0 --save
 npm install tailwindcss @tailwindcss/vite
 npm i react-router-dom
 ```
