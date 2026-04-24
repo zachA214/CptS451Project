@@ -21,4 +21,5 @@ urlpatterns = [
     path('categories/count/', get_category_count),
     path('orders/count/', get_order_count),
     path('orders/averagesale/', get_avg_sale),
+    path('orders/recent/', get_last_entries )
 ]
