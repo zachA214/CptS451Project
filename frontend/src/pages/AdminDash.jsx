@@ -1,4 +1,5 @@
 import { useState,useEffect } from "react";
+import Table from '../components/Table';
 
 
 export default function AdminDash(){
@@ -8,6 +9,7 @@ export default function AdminDash(){
     const [totalCategories, setTotalCategories] = useState(0);
     const [totalOrders, setTotalOrders] = useState(0);
     const [averageSale, setAverageSale] = useState(0.0);
+    const [recentOrders, setRecentOrders] = useState([]);
 
     const fetchTotalUsers = async () => {
         const response = await fetch(`http://localhost:8000/api/users/count/`, {
@@ -99,6 +101,26 @@ export default function AdminDash(){
         }
     }
 
+    const fetchRecentOrders = async () => {
+        const response = await fetch(`http://localhost:8000/api/orders/recent/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+        if(response.ok) {
+            const data = await response.json();
+            // Process recent orders data as needed
+            console.log(data);
+            setRecentOrders(data);
+        }
+        else
+        {
+            console.error("Failed to fetch recent orders: ", response.status);
+        }
+    }
+
 
     useEffect(() => {
         fetchTotalUsers();
@@ -106,6 +128,7 @@ export default function AdminDash(){
         fetchTotalCategories();
         fetchTotalOrders();
         fetchAverageSale();
+        fetchRecentOrders();
 
     }, []);
 
@@ -143,31 +166,10 @@ export default function AdminDash(){
 
             <div className="my-10 mx-4">
                 <h2 className="text-2xl font-bold mb-4">Recent Orders</h2>
-                <table className="w-full border-collapse">
-                    <thead>
-                        <tr>
-                            <th className="border p-2 text-left">Order ID</th>
-                            <th className="border p-2 text-left">Customer</th>
-                            <th className="border p-2 text-left">Total</th>
-                            <th className="border p-2 text-left">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="border p-2">#12345</td>
-                            <td className="border p-2">John Doe</td>
-                            <td className="border p-2">$120.50</td>
-                            <td className="border p-2">Shipped</td>
-                        </tr>
-                        <tr>
-                            <td className="border p-2">#12346</td>
-                            <td className="border p-2">Jane Smith</td>
-                            <td className="border p-2">$89.99</td>
-                            <td className="border p-2">Processing</td>
-                        </tr>
-                        {/* More rows here */}
-                    </tbody>
-                </table>
+                <div className="flex justify-center">
+                    <Table dictList = {recentOrders}/>
+                </div>
+            
             </div>
 
             <div className="flex items-center justify-center gap-10 my-10">

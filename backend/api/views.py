@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import (Order, Admin, UserAuth, Wishlist, ProductReview, User, Product, Category)
 from django.db.models import Avg
+from django.db.models import F, Value, CharField
+from django.db.models.functions import Concat
+from django.db.models import Func
 
 # Create your views here.
 @api_view(['GET'])
@@ -317,7 +320,39 @@ def get_avg_sale(request):
             return Response({"avg_total": float(string_avg)}, status=200)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
-        
+
+@api_view(['GET'])
+def get_last_entries(request):
+    if request.method == 'GET':
+        try:
+            orders = Order.objects.select_related('user').annotate(
+            full_name=Concat(F("user__first_name"), Value(" "), F("user__last_name")), #Concatenate first and last name
+            date_str=Func( #format date to show year, month, day only
+                F("date"),
+                Value("YYYY-MM-DD"),
+                function="to_char",
+                output_field=CharField(),
+            ),
+            ).values(
+                "order_id",
+                "full_name",
+                "total_price",
+                "status",
+                "date_str",
+            ).order_by("-date")[:3] #Order by date
+
+            for ord in orders:
+                ord["id"] = ord.pop("order_id")
+                ord["Date"] = ord.pop("date_str")
+                ord["Customer Name"] = ord.pop("full_name")
+                ord["Total Price"] = ord.pop("total_price")
+                ord["Status"] = ord.pop("status")
+                
+
+            print(orders)
+            return Response(list(orders), status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
         
 #Admin
 ###################################################################################
