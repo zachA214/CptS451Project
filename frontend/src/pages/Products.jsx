@@ -55,6 +55,25 @@ export default function Products() {
             .catch(err => console.error(err));
     };
 
+    const addToCart = (productId) => {
+        fetch('http://localhost:8000/api/cart/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ product_id: productId, quantity: 1 })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data?.error) {
+                    alert(data.error);
+                } else {
+                    alert("Added to cart!");
+                }
+            })
+            .catch(err => console.error(err));
+    };
+
     const openReviews = (productId) => {
         setActiveProduct(productId);
         setOpenReviewPanel(true);
@@ -149,6 +168,13 @@ export default function Products() {
                             </button>
 
                         </div>
+
+                        <button
+                            className="btn-primary text-xs px-2 py-1 w-full"
+                            onClick={() => addToCart(p.id)}
+                        >
+                            Add to Cart
+                        </button>
 
                         <button
                             className="text-blue-500 text-xs mt-1"
