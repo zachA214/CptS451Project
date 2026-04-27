@@ -1,8 +1,18 @@
 import { useState, useEffect } from 'react';
 
+
 export default function Wishlist() {
 
     const [items, setItems] = useState([]);
+    const [toast, setToast] = useState("");
+
+    const showToast = (message) => {
+        setToast(message);
+
+        setTimeout(() => {
+            setToast("");
+        }, 2000);
+    };
 
     useEffect(() => {
         fetch('http://localhost:8000/api/wishlist/')
@@ -23,13 +33,39 @@ export default function Wishlist() {
         .then(res => res.json())
         .then(data => {
             console.log("deleted", data);
-        setItems(prev => prev.filter(i => i.product.product_id !== productId));
+            setItems(prev => prev.filter(i => i.product.product_id !== productId));
+
+            showToast("Removed from wishlist");
         })
         .catch(err => console.error(err));
     };
 
+    const addToCart = (productId) => {
+        fetch('http://localhost:8000/api/cart/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ product_id: productId, quantity: 1 })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Added to cart:", data);
+                showToast("Added to cart");
+            })
+            .catch(err => console.error(err));
+    }; 
+
     return (
         <div className="container shadow-xl size-full">
+
+            {toast && (
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+                    <div className="flex items-center bg-gray-200 text-gray-900 px-6 py-3 rounded-lg shadow-xl text-sm font-semibold border border-gray-400">
+                        <span>{toast}</span>
+                    </div>
+                </div>
+            )}
 
             <div className="flex justify-center my-6">
                 <h1 className="text-3xl font-bold">
@@ -71,10 +107,17 @@ export default function Wishlist() {
                             <div className="flex gap-2 w-full">
 
                                 <button 
-                                className="btn-primary text-xs px-2 py-1 flex-1"
-                                onClick={() => removeFromWishlist(p.product_id)}
+                                    className="btn-primary text-xs px-2 py-1 flex-1"
+                                    onClick={() => removeFromWishlist(p.product_id)}
                                 >
                                     Remove
+                                </button>
+
+                                <button 
+                                    className="btn-primary text-xs px-2 py-1 flex-1"
+                                    onClick={() => addToCart(p.product_id)}
+                                >
+                                    Add to Cart
                                 </button>
 
                             </div>
@@ -85,6 +128,7 @@ export default function Wishlist() {
 
             </div>
         </div>
+
     );
 }
 

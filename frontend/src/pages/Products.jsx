@@ -5,6 +5,8 @@ export default function Products() {
 
     const [products, setProducts] = useState([]);
 
+    const [toast, setToast] = useState("");
+
     const [openReviewModal, setOpenReviewModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -15,6 +17,14 @@ export default function Products() {
 
     const [openReviewPanel, setOpenReviewPanel] = useState(false);
     const [activeProduct, setActiveProduct] = useState(null);
+
+    const showToast = (message) => {
+        setToast(message);
+
+        setTimeout(() => {
+                setToast("");
+            }, 2000);
+    };
 
     useEffect(() => {
         fetch('http://localhost:8000/api/products/')
@@ -51,7 +61,10 @@ export default function Products() {
             body: JSON.stringify({ product_id: productId })
         })
             .then(res => res.json())
-            .then(data => console.log("Added!", data))
+            .then(data => {
+                console.log("Added!", data);
+                showToast("Added to wishlist");
+            })
             .catch(err => console.error(err));
     };
 
@@ -65,11 +78,8 @@ export default function Products() {
         })
             .then(res => res.json())
             .then(data => {
-                if (data?.error) {
-                    alert(data.error);
-                } else {
-                    alert("Added to cart!");
-                }
+                console.log("Added to cart:", data);
+                showToast("Added to cart");
             })
             .catch(err => console.error(err));
     };
@@ -109,6 +119,8 @@ export default function Products() {
                 setComment("");
                 setSelectedProduct(null);
                 setOpenReviewModal(false);
+
+                showToast("Review submitted");
             })
             .catch(err => console.error(err));
     };
@@ -116,6 +128,14 @@ export default function Products() {
 
     return (
         <div className="container shadow-xl size-full">
+
+            {toast && (
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
+                    <div className="flex items-center bg-gray-200 text-gray-900 px-6 py-3 rounded-lg shadow-xl text-sm font-semibold border border-gray-400">
+                        <span>{toast}</span>
+                    </div>
+                </div>
+            )}
 
             <div className="flex justify-center my-6">
                 <h1 className="text-3xl font-bold">
