@@ -2,10 +2,11 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import (Order, Admin, UserAuth, Wishlist, ProductReview, User, Product, Category)
-from django.db.models import Avg
+from django.db.models import Avg, Sum
 from django.db.models import F, Value, CharField
 from django.db.models.functions import Concat
 from django.db.models import Func
+from django.utils import timezone
 
 # Create your views here.
 @api_view(['GET'])
@@ -354,6 +355,44 @@ def get_last_entries(request):
         except Exception as e:
             return Response({"error": str(e)}, status=400)
         
+@api_view(['GET'])
+def get_sales_week(request):
+    if request.method == 'GET':
+        try:
+            #calculate today
+            today = timezone.now()
+            # Calculate the date 7 days ago
+            seven_days_ago = today - timezone.timedelta(days=7)
+
+            #calculate date for last 30 days
+            thirty_days_ago = today - timezone.timedelta(days=30)
+
+            #calculate date for last 90 days
+            half_year = today - timezone.timedelta(days=180)
+
+            #calculate yearly sales
+            one_year_ago = today - timezone.timedelta(days=365)
+            
+            
+
+            # Filter orders from the last 7 days and calculate total sales
+            seven_sales = Order.objects.filter(date__gte=seven_days_ago).aggregate(total=Sum('total_price'))['total'] or 0
+            today_sales = Order.objects.filter(date__date=today.date()).aggregate(total=Sum('total_price'))['total'] or 0
+            thirty_day_sales = Order.objects.filter(date__gte=thirty_days_ago).aggregate(total=Sum('total_price'))['total'] or 0
+            mid_year_sales = Order.objects.filter(date__gte=half_year).aggregate(total=Sum('total_price'))['total'] or 0
+            yearly_sales = Order.objects.filter(date__gte=one_year_ago).aggregate(total=Sum('total_price'))['total'] or 0
+
+            string_today_sales = f"{today_sales:.2f}"
+            string_seven_sales = f"{seven_sales:.2f}"
+            string_thirty_day_sales = f"{thirty_day_sales:.2f}"
+            string_mid_year_sales = f"{mid_year_sales:.2f}"
+            string_yearly_sales = f"{yearly_sales:.2f}"
+
+            sales = {"Today": float(string_today_sales), "Weekly": float(string_seven_sales), "Monthly": float(string_thirty_day_sales), "MidYearly": float(string_mid_year_sales), "Yearly": float(string_yearly_sales)}
+
+            return Response(sales, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 #Admin
 ###################################################################################
 @api_view(['GET', 'POST'])
