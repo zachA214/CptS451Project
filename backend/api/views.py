@@ -393,6 +393,20 @@ def get_sales_week(request):
             return Response(sales, status=200)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+        
+@api_view(['GET'])
+def get_uniqueusers_week(request):
+    if request.method == 'GET':
+        try:
+            today = timezone.now()
+            seven_days_ago = today - timezone.timedelta(days=7)
+
+            unique_users = Order.objects.filter(date__gte=seven_days_ago).values('user_id').distinct().count()
+
+            return Response(unique_users, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
 #Admin
 ###################################################################################
 @api_view(['GET', 'POST'])

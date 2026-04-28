@@ -31,4 +31,5 @@ urlpatterns = [
     path('orders/averagesale/', get_avg_sale),
     path('orders/recent/', get_last_entries),
     path('orders/weeklysales/', get_sales_week),
+    path('orders/uniqueusersweekly/', get_uniqueusers_week),
 ]
