@@ -102,6 +102,14 @@ export default function Products() {
             .catch(err => console.error(err));
     };
 
+    const getAvgRating = (productId) => {
+    const productReviews = reviews[productId] || [];
+        if (productReviews.length === 0) return null;
+
+        const sum = productReviews.reduce((acc, r) => acc + r.rating, 0);
+        return sum / productReviews.length;
+    };
+
     return (
         <div className="container shadow-xl size-full pb-10">
 
@@ -172,12 +180,20 @@ export default function Products() {
                             Add to Cart
                         </button>
 
-                        <button
-                            className="text-blue-500 text-xs mt-1"
-                            onClick={() => openReviews(p.id)}
-                        >
-                            View Reviews &#8594;
-                        </button>
+                        <div className="flex items-center justify-between w-full mt-1">
+
+                            <p className="text-xs text-gray-500">
+                                &#11088; {getAvgRating(p.id) ? getAvgRating(p.id).toFixed(1) : "No ratings"}
+                            </p>
+
+                            <button
+                                className="text-blue-500 text-xs"
+                                onClick={() => openReviews(p.id)}
+                            >
+                                View Reviews &#8594;
+                            </button>
+
+                        </div>
 
                     </div>
                 ))}

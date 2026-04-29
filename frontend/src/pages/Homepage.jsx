@@ -78,7 +78,8 @@ export default function Homepage() {
                 </div>
 
 
-                <div className="flex-1 flex justify-center flex-col items-center">
+                <div className="flex-1 flex justify-center">
+                    <div className="bg-gray-50 rounded-xl p-5 px-15 shadow-sm flex flex-col items-center">
 
                     <p className="text-md text-gray-600 mb-3">
                         Featured Products
@@ -92,6 +93,7 @@ export default function Homepage() {
                             .map((p) => (
                         <div
                             key={p.id || p.product_id}
+                            onClick={() => navigate("/products")}
                             className="border border-gray-100 rounded-xl p-3 shadow-sm bg-white flex flex-col items-center text-center
                                     hover:shadow-lg hover:-translate-y-1 transition duration-200"
         
@@ -101,10 +103,10 @@ export default function Homepage() {
                                     <img
                                         src={p.img_val}
                                         alt={p.name}
-                                        className="w-16 h-16 object-cover rounded"
+                                        className="w-14 h-14 object-cover rounded"
                                     />
                                 ) : (
-                                    <div className="w-16 h-16 bg-gray-200 flex items-center justify-center text-[10px] text-gray-500 rounded">
+                                    <div className="w-14 h-14 bg-gray-200 flex items-center justify-center text-[10px] text-gray-500 rounded">
                                         No img
                                     </div>
                                 )}
@@ -115,6 +117,10 @@ export default function Homepage() {
 
                                 <p className="text-[10px] text-gray-500">
                                     ${p.price}
+                                </p>
+
+                                <p className="text-[10px] text-gray-500">
+                                    &#11088; {getAvgRating(p.id) ? getAvgRating(p.id).toFixed(1) : "No ratings"}
                                 </p>
 
                             </div>
@@ -132,6 +138,7 @@ export default function Homepage() {
                 </div>
 
 
+                </div>
             </div>
 
         </div>
