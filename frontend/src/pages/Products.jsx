@@ -4,7 +4,6 @@ import Modal from '../components/Modal';
 export default function Products() {
 
     const [products, setProducts] = useState([]);
-
     const [toast, setToast] = useState("");
 
     const [openReviewModal, setOpenReviewModal] = useState(false);
@@ -20,19 +19,13 @@ export default function Products() {
 
     const showToast = (message) => {
         setToast(message);
-
-        setTimeout(() => {
-                setToast("");
-            }, 2000);
+        setTimeout(() => setToast(""), 2000);
     };
 
     useEffect(() => {
         fetch('http://localhost:8000/api/products/')
             .then(res => res.json())
             .then(data => {
-
-                console.log("PRODUCTS:", data);
-
                 const productList = Array.isArray(data) ? data : [];
                 setProducts(productList);
 
@@ -47,7 +40,6 @@ export default function Products() {
                         })
                         .catch(err => console.error(err));
                 });
-
             })
             .catch(err => console.error(err));
     }, []);
@@ -55,32 +47,22 @@ export default function Products() {
     const addToWishlist = (productId) => {
         fetch('http://localhost:8000/api/wishlist/add/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ product_id: productId })
         })
             .then(res => res.json())
-            .then(data => {
-                console.log("Added!", data);
-                showToast("Added to wishlist");
-            })
+            .then(() => showToast("Added to wishlist"))
             .catch(err => console.error(err));
     };
 
     const addToCart = (productId) => {
         fetch('http://localhost:8000/api/cart/add/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ product_id: productId, quantity: 1 })
         })
             .then(res => res.json())
-            .then(data => {
-                console.log("Added to cart:", data);
-                showToast("Added to cart");
-            })
+            .then(() => showToast("Added to cart"))
             .catch(err => console.error(err));
     };
 
@@ -102,9 +84,7 @@ export default function Products() {
 
         fetch('http://localhost:8000/api/review/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 product_id: selectedProduct,
                 rating: parseInt(rating),
@@ -112,22 +92,18 @@ export default function Products() {
             })
         })
             .then(res => res.json())
-            .then(data => {
-                console.log("Review added:", data);
-
+            .then(() => {
                 setRating("");
                 setComment("");
                 setSelectedProduct(null);
                 setOpenReviewModal(false);
-
                 showToast("Review submitted");
             })
             .catch(err => console.error(err));
     };
 
-
     return (
-        <div className="container shadow-xl size-full">
+        <div className="container shadow-xl size-full pb-10">
 
             {toast && (
                 <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
@@ -138,9 +114,7 @@ export default function Products() {
             )}
 
             <div className="flex justify-center my-6">
-                <h1 className="text-3xl font-bold">
-                    Products
-                </h1>
+                <h1 className="text-3xl font-bold">Products</h1>
             </div>
 
             <div className="flex flex-wrap justify-center gap-6">
@@ -148,10 +122,10 @@ export default function Products() {
                 {products.map(p => (
                     <div
                         key={p.product_id}
-                        className="border p-4 w-64 shadow flex flex-col items-center gap-2"
+                        className="border border-gray-300 rounded-xl p-4 w-64 shadow hover:shadow-lg hover:-translate-y-1 transition flex flex-col items-center gap-3 bg-white"
                     >
 
-                        <p className="font-bold text-center">
+                        <p className="font-bold text-center text-sm">
                             {p.name}
                         </p>
 
@@ -159,17 +133,19 @@ export default function Products() {
                             ${p.price}
                         </p>
 
-                        {p.img_val ? (
-                            <img
-                                src={p.img_val}
-                                alt={p.name}
-                                className="w-20 h-20 object-cover"
-                            />
-                        ) : (
-                            <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-xs text-gray-500">
-                                No image
-                            </div>
-                        )}
+                        <div className="w-full flex justify-center">
+                            {p.img_val ? (
+                                <img
+                                    src={p.img_val}
+                                    alt={p.name}
+                                    className="w-28 h-28 object-cover rounded-md"
+                                />
+                            ) : (
+                                <div className="w-28 h-28 bg-gray-200 flex items-center justify-center text-xs text-gray-500 rounded-md">
+                                    No image
+                                </div>
+                            )}
+                        </div>
 
                         <div className="flex gap-2 w-full mt-2">
 
@@ -219,9 +195,7 @@ export default function Products() {
                     <div className="relative w-96 h-full bg-white shadow-xl p-4 overflow-y-auto">
 
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-lg font-bold">
-                                Reviews
-                            </h2>
+                            <h2 className="text-lg font-bold">Reviews</h2>
 
                             <button
                                 onClick={() => setOpenReviewPanel(false)}
@@ -235,15 +209,11 @@ export default function Products() {
                             reviews[activeProduct].map((r, i) => (
                                 <div key={i} className="border-b py-2">
                                     &#11088; {r.rating}
-                                    <p className="text-sm">
-                                        {r.comment}
-                                    </p>
+                                    <p className="text-sm">{r.comment}</p>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-gray-400">
-                                No reviews yet
-                            </p>
+                            <p className="text-gray-400">No reviews yet</p>
                         )}
 
                     </div>
@@ -260,9 +230,7 @@ export default function Products() {
             >
                 <div className="grid grid-cols-1 gap-2">
 
-                    <p className="text-xl font-bold">
-                        Write Review
-                    </p>
+                    <p className="text-xl font-bold">Write Review</p>
 
                     <input
                         className="border p-2"

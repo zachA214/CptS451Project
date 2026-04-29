@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-
 export default function Wishlist() {
 
     const [items, setItems] = useState([]);
@@ -8,10 +7,7 @@ export default function Wishlist() {
 
     const showToast = (message) => {
         setToast(message);
-
-        setTimeout(() => {
-            setToast("");
-        }, 2000);
+        setTimeout(() => setToast(""), 2000);
     };
 
     useEffect(() => {
@@ -24,40 +20,31 @@ export default function Wishlist() {
             .catch(err => console.error(err));
     }, []);
 
-    const removeFromWishlist = async (productId) => {
-        console.log("Remove from wishlist:", productId);
-
+    const removeFromWishlist = (productId) => {
         fetch(`http://localhost:8000/api/wishlist/remove/${productId}/`, {
             method: 'DELETE'
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log("deleted", data);
-            setItems(prev => prev.filter(i => i.product.product_id !== productId));
-
-            showToast("Removed from wishlist");
-        })
-        .catch(err => console.error(err));
+            .then(res => res.json())
+            .then(() => {
+                setItems(prev => prev.filter(i => i.product.product_id !== productId));
+                showToast("Removed from wishlist");
+            })
+            .catch(err => console.error(err));
     };
 
     const addToCart = (productId) => {
         fetch('http://localhost:8000/api/cart/add/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ product_id: productId, quantity: 1 })
         })
             .then(res => res.json())
-            .then(data => {
-                console.log("Added to cart:", data);
-                showToast("Added to cart");
-            })
+            .then(() => showToast("Added to cart"))
             .catch(err => console.error(err));
-    }; 
+    };
 
     return (
-        <div className="container shadow-xl size-full">
+        <div className="container shadow-xl size-full pb-10">
 
             {toast && (
                 <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
@@ -68,9 +55,7 @@ export default function Wishlist() {
             )}
 
             <div className="flex justify-center my-6">
-                <h1 className="text-3xl font-bold">
-                    Wishlist
-                </h1>
+                <h1 className="text-3xl font-bold">Wishlist</h1>
             </div>
 
             <div className="flex flex-wrap justify-center gap-6">
@@ -81,10 +66,10 @@ export default function Wishlist() {
                     return (
                         <div
                             key={item.id}
-                            className="border p-4 w-64 shadow flex flex-col items-center gap-2"
+                            className="border border-gray-300 rounded-xl p-4 w-64 shadow hover:shadow-lg hover:-translate-y-1 transition flex flex-col items-center gap-3 bg-white"
                         >
 
-                            <p className="font-bold text-center">
+                            <p className="font-bold text-center text-sm">
                                 {p?.name}
                             </p>
 
@@ -92,28 +77,30 @@ export default function Wishlist() {
                                 ${p?.price}
                             </p>
 
-                            {p.img_val ? (
-                                <img
-                                    src={p.img_val}
-                                    alt={p.name}
-                                    className="w-20 h-20 object-cover"
-                                />
-                            ) : (
-                                <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-xs text-gray-500">
-                                    No image
-                                </div>
-                            )}
+                            <div className="w-full flex justify-center">
+                                {p?.img_val ? (
+                                    <img
+                                        src={p.img_val}
+                                        alt={p.name}
+                                        className="w-28 h-28 object-cover rounded-md"
+                                    />
+                                ) : (
+                                    <div className="w-28 h-28 bg-gray-200 flex items-center justify-center text-xs text-gray-500 rounded-md">
+                                        No image
+                                    </div>
+                                )}
+                            </div>
 
                             <div className="flex gap-2 w-full">
 
-                                <button 
+                                <button
                                     className="btn-primary text-xs px-2 py-1 flex-1"
                                     onClick={() => removeFromWishlist(p.product_id)}
                                 >
                                     Remove
                                 </button>
 
-                                <button 
+                                <button
                                     className="btn-primary text-xs px-2 py-1 flex-1"
                                     onClick={() => addToCart(p.product_id)}
                                 >
@@ -128,7 +115,7 @@ export default function Wishlist() {
 
             </div>
         </div>
-
     );
 }
+
 
