@@ -9,6 +9,8 @@ import AdAddCategory from './pages/AdAddCategory'
 import Wishlist from './pages/Wishlist'
 import Products from './pages/Products'
 import AdAddProducts from './pages/AdAddProducts'
+import Search from './pages/Search'
+import Cart from './pages/Cart'
 
 const router = createBrowserRouter([
   {
@@ -20,6 +22,8 @@ const router = createBrowserRouter([
       {path: '/admin/categories', element: <AdAddCategory/>},
       { path: '/wishlist', element: <Wishlist/> },
       { path: '/products', element: <Products/> },
+      { path: '/search', element: <Search/> },
+      { path: '/cart', element: <Cart/> },
       {path: '/admin/products', element: <AdAddProducts/>}
     ],
   },

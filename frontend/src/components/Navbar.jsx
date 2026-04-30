@@ -54,6 +54,7 @@ export default function Navbar({bool}){
             navigate("/admin/products");
         } else {
             //user search here
+            navigate("/search");
         }
     }
 
@@ -108,6 +109,14 @@ export default function Navbar({bool}){
                             onClick={() => navigate("/wishlist")}
                         >
                         Wishlist
+                        </button>
+                    )}
+                    {!bool && (
+                        <button
+                            className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
+                            onClick={() => navigate("/cart")}
+                        >
+                        Cart
                         </button>
                     )}
                 </div>
