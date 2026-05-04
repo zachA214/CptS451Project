@@ -28,6 +28,7 @@ export default function Products() {
             .then(data => {
                 const productList = Array.isArray(data) ? data : [];
                 setProducts(productList);
+                console.log(productList);
 
                 productList.forEach(p => {
                     fetch(`http://localhost:8000/api/review/${p.id}/`)
@@ -142,9 +143,9 @@ export default function Products() {
                         </p>
 
                         <div className="w-full flex justify-center">
-                            {p.img_val ? (
+                            {p.image_val ? (
                                 <img
-                                    src={p.img_val}
+                                    src={p.image_val}
                                     alt={p.name}
                                     className="w-28 h-28 object-cover rounded-md"
                                 />

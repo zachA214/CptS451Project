@@ -11,6 +11,7 @@ import Products from './pages/Products'
 import AdAddProducts from './pages/AdAddProducts'
 import Search from './pages/Search'
 import Cart from './pages/Cart'
+import Login from './pages/Login'
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,8 @@ const router = createBrowserRouter([
       { path: '/products', element: <Products/> },
       { path: '/search', element: <Search/> },
       { path: '/cart', element: <Cart/> },
-      {path: '/admin/products', element: <AdAddProducts/>}
+      {path: '/admin/products', element: <AdAddProducts/>},
+      {path: '/login', element: <Login/>}
     ],
   },
 ])

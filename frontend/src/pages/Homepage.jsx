@@ -99,9 +99,9 @@ export default function Homepage() {
         
                         >
 
-                                {p.img_val ? (
+                                {p.image_val ? (
                                     <img
-                                        src={p.img_val}
+                                        src={p.image_val}
                                         alt={p.name}
                                         className="w-14 h-14 object-cover rounded"
                                     />

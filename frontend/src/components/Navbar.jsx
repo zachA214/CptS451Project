@@ -8,7 +8,11 @@ export default function Navbar({bool}){
     const [button3, setButton3] = useState("Search");
     const [initials, setinitials] = useState("DEF");
     const [hid, setHid] = useState(true);
-    const [loginBtn, setLoginBtn] = useState("Login/Signup");
+    const [loginBtn, setLoginBtn] = useState("Login");
+
+  
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [name, setName] = useState("");
     
     //Use to navigate to different pages
     const navigate = useNavigate();
@@ -18,7 +22,7 @@ export default function Navbar({bool}){
             setButton1("Dashboard");
             setButton2("Categories");
             setButton3("Products");
-            setinitials("OU");
+            setinitials("");//TODO: get admin name and set initials
             setHid(false);
             setLoginBtn("Logout");
         }
@@ -59,9 +63,24 @@ export default function Navbar({bool}){
     }
 
 
+    function onLoginBtnClick() {
+        if(loginBtn === "Login"){
+            setLoginBtn("Logout");
+            navigate("/login");
+        }
+        else{
+            setLoginBtn("Login/Signup");
+            navigate("/");
+        }
+
+    }
+
+
+
     useEffect(() => {
         isAdmin(bool);
-    });
+
+    },[]);
 
     return(
         <nav className="relative bg-gray-800 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
@@ -126,7 +145,7 @@ export default function Navbar({bool}){
                 <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white" hidden={hid}>
                     <p className="">{initials}</p>
                 </button>
-                <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+                <button className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white" onClick={onLoginBtnClick}>
                     {loginBtn}
                 </button>
                 
@@ -137,4 +156,3 @@ export default function Navbar({bool}){
         </nav>
     );
 };
-//export default Navbar;

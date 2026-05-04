@@ -69,12 +69,13 @@ export default function AdAddCategory(){
                 'Content-Type': 'application/json'
             }
         })
-        
+
         if (response.ok) {
             const result = await response.json();
             console.log("Category deleted: ");
             setName("");
-            setOpen(false);
+            setCategoryId("");
+            setopenDelCatModal(false);
             setRefresh(prev => !prev);
             setToast({ show: true, message: result.message, type: "success" });
             setTimeout(() => {setToast(t => ({show: false}));}, 3000);

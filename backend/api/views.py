@@ -460,3 +460,13 @@ def get_add_userauth(request):
             return Response({"message": "User added"})
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+        
+@api_view(['GET'])
+def user_role(request, user_id):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(user_id=user_id)
+            role = True if user.is_admin else False
+            return Response(role, status=200)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
